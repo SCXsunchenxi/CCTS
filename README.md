@@ -6,7 +6,7 @@ Continuous diagnosis and prognosis are essential for intensive care patients. It
 The major advantages of our study are fourfold: (1) For continuous diagnosis and prognosis of time-sensitive illness, we design a restricted update strategy of neural networks (RU) for the DL model, which outperforms baselines. (2) RU has a certain ability to interpret the update of DL models and the change of medical time series through input indicators and parameter visualization. These side effects make our method attractive in medical applications where model interpretation and marker discovery are required. (3) We extend our method to connect the distribution change of vital signs with the parameter change of the DL model and we find typical disease biomarkers and stages of sepsis and COVID-19. (4) RU is a data-agnostic, model-agnostic, and easy-to-use plug-in. It can be used to train various types of DL models. Note that such a continuous prediction mode is needed in most time-sensitive applications, not just in medical tasks. We define these tasks with a new concept, Continues Classification of Time Series (CCTS).
 
 #### Continuous Diagnosis and Prognosis with Disease Staging
-![Image text](https://github.com/SCXsunchenxi/CCTS/blob/main/figure/introduction.png)
+![Image text](https://raw.githubusercontent.com/SCXsunchenxi/CCTS/main/figure/introduction.png)
 
 #### Continues Classification of Time Series (CCTS) & Restricted Update strategy of neural networks (RU)
 ![Image text](https://github.com/SCXsunchenxi/CCTS/blob/main/figure/method.png)
