@@ -1,5 +1,5 @@
 # CCTS
-Continuous Diagnosis and Prognosis with Disease Staging using Deep Learning 
+### Continuous Diagnosis and Prognosis with Disease Staging using Deep Learning 
 
 Continuous diagnosis and prognosis are essential for intensive care patients. It can provide more opportunities for timely treatment and rational resource allocation, especially for sepsis, a main cause of death in ICU, and COVID-19, a new worldwide epidemic. Although deep learning (DL) methods have shown their great superiority in many medical tasks, they tend to catastrophically forget, over fit, and get results too late when performing diagnosis and prognosis in the continuous mode. In this manuscript, we achieved high accuracy results for continuous diagnosis and prognosis, 90%, 97%, and 85% accuracy on continuous sepsis prognosis, continuous COVID-19 mortality prediction, and continuous eight diseases classification. We found 4 stages for sepsis with the 6 typical biomarkers (heart rate, respiration mean arterial pressure, PaCO2, platelets count, total bilirubin, and creatinine). We found three stages for COVID-19 with the 5 typical biomarkers (lymphocytes, lactic dehydrogenase, high-sensitivity C-reactive protein, indirect bilirubin, and creatinine). 
 
