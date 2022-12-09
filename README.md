@@ -1,7 +1,6 @@
     ├── Readme.md                   // help  
-    ├── T-LSTM                      // method code      
-    │   ├── LSTMtimedecay.py      
-    │   ├── loss_gradient.py  
+    ├── alg                         // method code      
+    │   ├── model.py        
     │   └── main.py             
     ├── baselines                   // baseline methods code   
     │   ├── LSTM  
@@ -17,10 +16,13 @@
     │   ├── DataStatistics.ipynb                
     │   └── ResultsVis.ipynb    
     ├── data                        // raw data   
-    ├── BatchData                   // preprocessed data   
+    ├── BatchData                   // preprocessed data  
+    ├── StageData                   // preprocessed data 
+    ├── StageBatchData              // preprocessed data for test 
     ├── figures                     // result figures       
-    ├── model                       // saved DL model  
-    └── results                     // result files   
+    ├── model                       // saved DL model
+    ├── results                     // result files    
+    └── example.ipynb               // runnable test case 
 
 
 ## Requirements
@@ -42,6 +44,10 @@ The datasets can be downloaded from the following links:
 ### Pre-processing
 
 In order to pre-process the datasets appropriately for RU, please run DataProcess.ipynb and get data in BatchData
+
+## Test case
+
+To test the model(s) in the paper, run example.ipynb
 
 ## Training
 

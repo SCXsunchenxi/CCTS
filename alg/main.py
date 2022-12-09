@@ -8,7 +8,7 @@ from sklearn.metrics import accuracy_score
 from sklearn.metrics import roc_auc_score
 import matplotlib.pyplot as plt
 
-from LSTMtimedecay import LSTM
+from alg.model import TLSTM
 
 def load_pkl(path):
     with open(path,'rb') as f:
@@ -40,7 +40,7 @@ def training(path,learning_rate,training_epochs,train_dropout_prob,hidden_dim,fc
     input_dim = np.array(data_train_batches[0]).shape[2]
     output_dim = np.array(labels_train_batches[0]).shape[1]
 
-    lstm = LSTM(input_dim, output_dim, hidden_dim, fc_dim,key)
+    lstm = TLSTM(input_dim, output_dim, hidden_dim, fc_dim,key)
 
     cross_entropy, y_pred, y, logits, labels = lstm.get_cost_acc()
     optimizer = tf.train.AdamOptimizer(learning_rate=learning_rate).minimize(cross_entropy)
@@ -95,9 +95,10 @@ def training(path,learning_rate,training_epochs,train_dropout_prob,hidden_dim,fc
         print("Train AUC = {:.3f}".format(total_auc))
         print("Train AUC Macro = {:.3f}".format(total_auc_macro))
 
+        acc=[total_acc,total_auc,total_auc_macro]
+    return acc
 
-
-def testing(path,hidden_dim,fc_dim,key,model_path):
+def testing(path,hidden_dim,fc_dim,key,model_path,state_path):
     path_string = path + '/TestData.seqs'
     data_test_batches = load_pkl(path_string)
 
@@ -115,7 +116,7 @@ def testing(path,hidden_dim,fc_dim,key,model_path):
     output_dim = np.array(labels_test_batches[0]).shape[1]
 
     test_dropout_prob = 1.0
-    lstm_load = LSTM(input_dim, output_dim, hidden_dim, fc_dim, key)
+    lstm_load = TLSTM(input_dim, output_dim, hidden_dim, fc_dim, key)
 
     saver = tf.train.Saver()
     with tf.Session() as sess:
@@ -150,6 +151,8 @@ def testing(path,hidden_dim,fc_dim,key,model_path):
         print("Test AUC Micro = {:.3f}".format(total_auc))
         print("Test AUC Macro = {:.3f}".format(total_auc_macro))
 
+        acc=[total_auc,total_auc_macro,total_acc]
+
         fpr, tpr, threshold = metrics.roc_curve(Y_true, Y_pred)
 
         plt.title('Test AUC-ROC')
@@ -170,12 +173,12 @@ def testing(path,hidden_dim,fc_dim,key,model_path):
                                                                                         lstm_load.time: batch_ts,\
                                                                                         lstm_load.keep_prob: test_dropout_prob})
             states.append(state)
-        pickle.dump(states, open('../emb/states.seqs', 'wb'), -1)
+        pickle.dump(states, open(state_path, 'wb'), -1)
         print("[*] States saved at emb/states.seqs")
+    return acc
 
 
-
-def main(training_mode,data_path, learning_rate, training_epochs,dropout_prob,hidden_dim,fc_dim,model_path):
+def main(training_mode,data_path, learning_rate, training_epochs,dropout_prob,hidden_dim,fc_dim,model_path,state_path='../emb/states.seqs'):
 
     training_mode = int(training_mode)
     path = str(data_path)
@@ -188,20 +191,26 @@ def main(training_mode,data_path, learning_rate, training_epochs,dropout_prob,hi
         hidden_dim = int(hidden_dim)
         fc_dim = int(fc_dim)
         model_path = str(model_path)
-        training(path,learning_rate,training_epochs, dropout_prob, hidden_dim, fc_dim, training_mode, model_path)
+        acc=training(path,learning_rate,training_epochs, dropout_prob, hidden_dim, fc_dim, training_mode, model_path)
 
     # test
     elif training_mode==0:
         hidden_dim = int(hidden_dim)
         fc_dim = int(fc_dim)
         model_path = str(model_path)
-        testing(path, hidden_dim, fc_dim, training_mode, model_path)
+        acc=testing(path, hidden_dim, fc_dim, training_mode, model_path,state_path)
+    return acc
 
+def test(data_path,model_path,state_path):
+    acc=main(training_mode=0, data_path=data_path, learning_rate=2e-3, training_epochs=15, dropout_prob=0.25,
+         hidden_dim=64, fc_dim=32, model_path=model_path,state_path=state_path)
 
-
+    return acc
 
 if __name__ == "__main__":
+    # train
+    # main(training_mode=1, data_path='../BatchData', learning_rate=2e-3, training_epochs=15, dropout_prob=0.25,hidden_dim=64, fc_dim=32, model_path='../model/')
 
-   main(training_mode=0,data_path='../BatchData', learning_rate= 2e-3, training_epochs=15,dropout_prob=0.25,hidden_dim=64,fc_dim=32,model_path='../model/')
-
-
+    # test
+    acc=main(training_mode=0,data_path='../BatchData', learning_rate= 2e-3, training_epochs=15,dropout_prob=0.25,hidden_dim=64,fc_dim=32,model_path='../model/')
+    print(acc)
